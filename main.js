@@ -56,22 +56,24 @@ const remove = (num) => {
 }
 
 const toggleComplete = (num) => { 
-  todos[num - 1].isComplete = (todos[num - 1].isComplete) ? false : true;
-  // let theTodo = todos[num - 1]
-  // if(theTodo.isComplete == true){
-  //   theTodo.isComplete = false
-  // } else (theTodo.isComplete === false)
-  //   theTodo.isComplete = true
-  
+  // todos[num - 1].isComplete = (todos[num - 1].isComplete) ? false : true;
+  const theTodo = todos[num - 1]
+  if(theTodo.isComplete){
+    theTodo.isComplete = false
+  } else {
+    theTodo.isComplete = true
+  }
   displayTodos();
   displayMenu();
-
 }
 
+
+
 const togglePriority = (num) => {
-  // if(todos[num -1].priority === 1){
+  const todo = todos[num -1];
+  // if(todo.priority === 1){
   //   todos.priority = 2
-  // } else (todos[num -1].priority === 2)
+  // } else (todo.priority === 2)
   //   todos.priority = 1
 
   todos[num - 1].priority = (todos[num - 1].priority == 1) ? 2 : 1;
@@ -81,12 +83,24 @@ const togglePriority = (num) => {
 
 }
 
-const removeCompletedTodos = () => {
+// const removeCompletedTodos = () => {
+//   todos = todos.filter(function(todo) {
+//     return todo.isComplete === false;
+//   })
 
+//   displayTodos();
+//   displayMenu();
+
+// }
+
+const removeCompletedTodos = function () {
+  todos = todos.filter((todo) => todo.isComplete === false);
+ 
   displayTodos();
   displayMenu();
 
 }
+
 const handleMenu = (cmd) => {
   switch (cmd) {
     case '1':
