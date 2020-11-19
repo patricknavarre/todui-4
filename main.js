@@ -3,7 +3,7 @@ const data = require('./data.js')
 
 
 const COMPLETE_MARK = '✅';
-const INCOMPLETE_MARK = '✖';
+const INCOMPLETE_MARK = '❌';
 
 let todos = data.todos;
 const interface = readline.createInterface({
@@ -23,37 +23,21 @@ Your options are:
 
 `
 
-const displayMenu = function() {
+const displayMenu = () => {
   interface.question(menu, handleMenu);
 }
 
-const displayTodos = function() {
+const displayTodos = () => {
   console.clear();
   console.log('\nHere are your current todos:\n')
   for (let i = 0; i < todos.length; i++) {
     const todo = todos[i];
     const num = i + 1;
-    console.log(num + '. ' + todo.text);
+    console.log(num + '. ' + todo.text + ' priority: ' + todo.priority + ' - ' + (todo.isComplete ? COMPLETE_MARK : INCOMPLETE_MARK));
   }
 }
 
-// or, without intermediate variables:
-const displayTodosAlt1 = function() {
-  console.log('\nHere are your current todos:\n')
-  for (let i = 0; i < todos.length; i++) {
-    console.log(i + 1 + '. ' + todos[i].text);
-  }
-}
-
-// or, with interpolation:
-const displayTodosAlt2 = function() {
-  console.log('\nHere are your current todos:\n')
-  for (let i = 0; i < todos.length; i++) {
-    console.log(`${i + 1}. ${todos[i].text}`);
-  }
-}
-
-const add = function(answer) {
+const add = (answer) => {
   const todo = {
     text: answer,
     priority: 2,
@@ -65,28 +49,71 @@ const add = function(answer) {
   displayMenu();
 }
 
-const remove = function(num) {
+const remove = (num) => {
   todos.splice(num - 1, 1);
   displayTodos();
   displayMenu();
 }
 
-const handleMenu = function(cmd) {
-  if (cmd === '1') {
+const toggleComplete = (num) => { 
+  todos[num - 1].isComplete = (todos[num - 1].isComplete) ? false : true;
+  // let theTodo = todos[num - 1]
+  // if(theTodo.isComplete == true){
+  //   theTodo.isComplete = false
+  // } else (theTodo.isComplete === false)
+  //   theTodo.isComplete = true
+  
+  displayTodos();
+  displayMenu();
+
+}
+
+const togglePriority = (num) => {
+  // if(todos[num -1].priority === 1){
+  //   todos.priority = 2
+  // } else (todos[num -1].priority === 2)
+  //   todos.priority = 1
+
+  todos[num - 1].priority = (todos[num - 1].priority == 1) ? 2 : 1;
+
+  displayTodos();
+  displayMenu();
+
+}
+
+const removeCompletedTodos = () => {
+
+  displayTodos();
+  displayMenu();
+
+}
+const handleMenu = (cmd) => {
+  switch (cmd) {
+    case '1':
     console.clear();
     interface.question('\nWhat should go on your list?\n\n', add)
-  } else if (cmd === '2') {
+    break;
+
+  case '2': 
     displayTodos();
     interface.question('\nType a number to pick a todo to remove: ', remove)
-  } else if (cmd === '3') {
+    break;
+
+  case '3': 
     removeCompletedTodos();
-  } else if (cmd === '4') {
+    break;
+
+  case '4': 
     displayTodos();
-    interface.question('\nPlease pick a todo to check complete or incomlete: ', toggleComplete)
-  } else if (cmd === '5') {
+    interface.question('\nPlease pick a todo to check complete or incomplete: ', toggleComplete)
+    break;
+
+  case '5': 
     displayTodos();
     interface.question('\nPlease pick a todo to toggle its priority: ', togglePriority)
-  } else {
+    break;
+
+  default:
     console.log('Quitting!');
     interface.close();
   }
